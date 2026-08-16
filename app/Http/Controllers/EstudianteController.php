@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Estudiante;
+use App\Models\Profesor;
 use Illuminate\Http\Request;
 
 class EstudianteController extends Controller
@@ -21,7 +22,9 @@ class EstudianteController extends Controller
      */
     public function create()
     {
-        return view('estudiantes.create');
+        $profesores = Profesor::all();
+
+        return view('estudiantes.create', compact('profesores'));
     }
 
     /**
@@ -49,7 +52,8 @@ class EstudianteController extends Controller
         'apellido' => $request->apellido,
         'dni' => $request->dni,
         'fecha_nacimiento' => $request->fecha_nacimiento,
-        'foto_perfil' => $ruta
+        'foto_perfil' => $ruta,
+        'profesor_id' => $request->profesor_id,
     ]);
 
     return redirect()->route('estudiantes.index');
@@ -59,7 +63,7 @@ class EstudianteController extends Controller
      */
     public function show(Estudiante $estudiante)
     {
-        //
+        return view('estudiantes.show', compact('estudiante'));
     }
 
     /**
@@ -67,7 +71,9 @@ class EstudianteController extends Controller
      */
     public function edit(Estudiante $estudiante)
     {
-         return view('estudiantes.edit', compact('estudiante'));
+         $profesores = Profesor::all();
+         
+         return view('estudiantes.edit', compact('estudiante', 'profesores'));
     }
 
     /**

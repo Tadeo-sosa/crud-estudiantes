@@ -1,6 +1,14 @@
+@extends('layouts.app')
+
+@section('title', 'Listado de Estudiantes')
+
+@section('content')
+
 <h1>Lista de estudiantes</h1>
 
-<a href="{{ route('estudiantes.create') }}">Nuevo</a>
+<a href="{{ route('estudiantes.create') }}" class="btn btn-success mb-3">
+    <i class="fas fa-plus"></i> Nuevo Estudiante
+</a>
 <style>
     table {
         font-family: 'Poppins', sans-serif;
@@ -14,13 +22,22 @@
         text-align: center;
     }
 </style>
-<table border="1">
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            Lista de Estudiantes
+        </h3>
+    </div>
+
+    <div class="card-body">
+<table id="tablaEstudiantes" border="1">
     <tr>
         <th>Nombre</th>
         <th>Apellido</th>
         <th>DNI</th>
         <th>Foto</th>
         <th>Acciones</th>
+        <th>Profesor</th>
     </tr>
 
     @foreach($estudiantes as $e)
@@ -33,15 +50,49 @@
                 <img src="{{ asset('storage/'.$e->foto_perfil) }}" width="50">
             @endif
         </td>
+
         <td>
-            <a href="{{ route('estudiantes.edit', $e) }}">Editar</a>
+            {{ $e->profesor->nombre ?? 'Sin profesor' }}
+        
+        </td>
+        
+        <td>
+            <a href="{{ route('estudiantes.edit',$e) }}"
+class="btn btn-warning btn-sm">
+Editar
+</a>
+                <a href="{{ route('estudiantes.show',$e) }}"
+class="btn btn-info btn-sm">
+Ver
+</a>
 
             <form action="{{ route('estudiantes.destroy', $e) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button>Eliminar</button>
+                <button   class="btn btn-danger btn-sm"
+    onclick="return confirm('¿Estás seguro de eliminar este estudiante?')">
+    <i class="fas fa-trash">>Eliminar</button>
             </form>
         </td>
     </tr>
     @endforeach
 </table>
+</div>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+$(document).ready(function () {
+
+    $('#tablaEstudiantes').DataTable({
+        responsive: true,
+        autoWidth: false,
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+        }
+    });
+
+});
+</script>
+@endpush
