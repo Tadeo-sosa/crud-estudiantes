@@ -1,42 +1,72 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title')</title>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-
-    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
-
-@stack('scripts')
-
-    @stack('styles')
+    <!-- Scripts -->
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-<body class="hold-transition sidebar-mini">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav me-auto">
 
-    @yield('content')
+                    </ul>
 
-<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
+                    <!-- Right Side Of Navbar -->
+                    <ul class="navbar-nav ms-auto">
+                        <!-- Authentication Links -->
+                        @guest
+                            @if (Route::has('login'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                </li>
+                            @endif
 
-@stack('scripts')
+                            @if (Route::has('register'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                </li>
+                            @endif
+                        @else
+    <li class="nav-item">
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
 
+            <button type="submit" class="btn btn-outline-danger">
+                Cerrar sesión
+            </button>
+        </form>
+    </li>
+@endguest
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <main class="py-4">
+            @yield('content')
+        </main>
+    </div>
 </body>
 </html>

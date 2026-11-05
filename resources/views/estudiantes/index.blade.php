@@ -1,16 +1,17 @@
-@extends('layouts.app')
+@extends('layouts.adminlte')
 
 @section('title', 'Listado de Estudiantes')
 
 @section('content')
 
 <h1>Lista de estudiantes</h1>
-
+@if(auth()->user()->esAdmin())
 <a href="{{ route('estudiantes.create') }}" class="btn btn-success mb-3">
     <i class="fas fa-plus"></i> Nuevo Estudiante
 </a>
+@endif
 <style>
-    table {
+    table { 
         font-family: 'Poppins', sans-serif;
         border-collapse: collapse;
         width: 100%;
@@ -57,23 +58,29 @@
         </td>
         
         <td>
-            <a href="{{ route('estudiantes.edit',$e) }}"
-class="btn btn-warning btn-sm">
-Editar
-</a>
-                <a href="{{ route('estudiantes.show',$e) }}"
-class="btn btn-info btn-sm">
-Ver
-</a>
+    {{-- Este botón lo pueden ver ambos roles --}}
+    <a href="{{ route('estudiantes.show',$e) }}" class="btn btn-info btn-sm">
+        Ver
+    </a>
 
-            <form action="{{ route('estudiantes.destroy', $e) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <button   class="btn btn-danger btn-sm"
-    onclick="return confirm('¿Estás seguro de eliminar este estudiante?')">
-    <i class="fas fa-trash">>Eliminar</button>
-            </form>
-        </td>
+    {{-- Estos botones solamente los puede ver el administrador --}}
+    @if(auth()->user()->esAdmin())
+
+        <a href="{{ route('estudiantes.edit',$e) }}" class="btn btn-warning btn-sm">
+            Editar
+        </a>
+
+        <form action="{{ route('estudiantes.destroy', $e) }}" method="POST">
+            @csrf
+            @method('DELETE')
+
+            <button class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este estudiante?')">
+                <i class="fas fa-trash"></i> Eliminar
+            </button>
+        </form>
+
+    @endif
+</td>
     </tr>
     @endforeach
 </table>
